@@ -21,25 +21,30 @@ public class ScheduledThreads{
         Callable<String> taskRun = () -> {
             System.err.println(
                 atomicIntegr.getAndIncrement() + " *** " + System.currentTimeMillis() + " " + LocalDateTime.now());
+                if(atomicIntegr.get() == 5)
+                return "Success";
                 return "Fail";
             };
-            ScheduledExecutorService scExService = Executors.newScheduledThreadPool(1);
+            ScheduledExecutorService singleExService = Executors.newScheduledThreadPool(1);
+
+            ScheduledExecutorService recurringTaskExecutor = Executors.newScheduledThreadPool(1);
 
             AtomicReference<ScheduledFuture<String>> automicfutureRef = new AtomicReference<>();
 
-            automicfutureRef.set(scExService.schedule(taskRun, 0, TimeUnit.SECONDS));
+            automicfutureRef.set(singleExService.schedule(taskRun, 5, TimeUnit.SECONDS));
 
-            scExService.scheduleWithFixedDelay(() -> {
+            recurringTaskExecutor.scheduleWithFixedDelay(() -> {
                 try {
                     String futureStr = automicfutureRef.get().get();
 
                     System.err.println("Future Response " + futureStr);
 
                     if (futureStr.equals("Success") || atomicIntegr.get() >= 10) {
-                        scExService.shutdown();
-                        scExService.shutdownNow();
+                        recurringTaskExecutor.shutdown();
+                        recurringTaskExecutor.shutdownNow();
+                        singleExService.shutdownNow();
                     } else {
-                        automicfutureRef.set(scExService.schedule(taskRun, 10, TimeUnit.SECONDS));
+                        automicfutureRef.set(recurringTaskExecutor.schedule(taskRun, 10, TimeUnit.SECONDS));
                     }
 
                 } catch (InterruptedException | ExecutionException e) {
