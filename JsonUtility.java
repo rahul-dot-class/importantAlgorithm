@@ -15,6 +15,7 @@ public class JsonUtility {
 	/**
 	 * @purpose to retrieve inner objects from json String like inception
 	 * @author Rahul Suryawanshi
+	 *
 	 **/
 
 	public class ConversionUtility {
@@ -38,7 +39,7 @@ public class JsonUtility {
 			String[] lKeyArr = pKay.split("\\|");
 			Object lObj = null;
 			if (pPayload instanceof String)
-				lObj = convertStringToMap((String) pPayload);
+				convertStringToMap((String) pPayload);
 			else
 				lObj = pPayload;
 
