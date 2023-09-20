@@ -10,8 +10,6 @@ import com.google.gson.reflect.TypeToken;
 //<version>use the leates version here </version>
 //</dependency>
 
-public class JsonUtility {
-
 	/**
 	 * @purpose to retrieve inner objects from json String like inception
 	 * @author Rahul Suryawanshi
@@ -39,7 +37,7 @@ public class JsonUtility {
 			String[] lKeyArr = pKay.split("\\|");
 			Object lObj = null;
 			if (pPayload instanceof String)
-				convertStringToMap((String) pPayload);
+				lObj = convertStringToMap((String) pPayload);
 			else
 				lObj = pPayload;
 
@@ -113,5 +111,3 @@ public class JsonUtility {
 			return null;
 		}
 	}
-
-}
